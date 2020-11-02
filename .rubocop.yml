@@ -1,16 +1,2 @@
-Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
-Style/StringLiteralsInInterpolation:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
-Layout/LineLength:
-  Max: 120
-
-Metrics/BlockLength:
-  ExcludedMethods: ['describe', 'context']
-
-Naming:
-  Enabled: False
+inherit_gem:
+  rubocop-shopify: rubocop.yml
