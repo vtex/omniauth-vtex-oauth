@@ -57,14 +57,14 @@ RSpec.describe(OmniAuth::Strategies::VtexOauth2) do
 
   describe "#request_phase" do
     before do
-      allow(strategy).to receive(:callback_url).and_return("https://example.com/auths/oauth2/callback")
-      allow(strategy).to receive(:authorize_params).and_return({})
+      allow(strategy).to(receive(:callback_url).and_return("https://example.com/auths/oauth2/callback"))
+      allow(strategy).to(receive(:authorize_params).and_return({}))
     end
 
     let!(:redirect_url) do
       client = strategy.client
 
-      params = { :redirect_uri => strategy.callback_url }.merge(strategy.authorize_params)
+      params = { redirect_uri: strategy.callback_url }.merge(strategy.authorize_params)
       client.auth_code.authorize_url(params)
     end
 
@@ -74,7 +74,7 @@ RSpec.describe(OmniAuth::Strategies::VtexOauth2) do
       before { strategy.options.use_admin = false }
 
       it "redirects to oauth provider" do
-        expect(strategy).to receive(:redirect).with(redirect_url)
+        expect(strategy).to(receive(:redirect).with(redirect_url))
         subject
       end
     end
@@ -85,7 +85,7 @@ RSpec.describe(OmniAuth::Strategies::VtexOauth2) do
       it "redirects to oauth provider" do
         admin_url = "/admin/login?redirectUrl=#{redirect_url}"
 
-        expect(strategy).to receive(:redirect).with(admin_url)
+        expect(strategy).to(receive(:redirect).with(admin_url))
         subject
       end
     end
