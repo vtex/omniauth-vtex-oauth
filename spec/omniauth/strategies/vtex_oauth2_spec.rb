@@ -54,4 +54,40 @@ RSpec.describe(OmniAuth::Strategies::VtexOauth2) do
     it { is_expected.to(include(name: "John Doe")) }
     it { is_expected.to(include(email: "john.doe@example.com")) }
   end
+
+  describe "#request_phase" do
+    before do
+      allow(strategy).to receive(:callback_url).and_return("https://example.com/auths/oauth2/callback")
+      allow(strategy).to receive(:authorize_params).and_return({})
+    end
+
+    let!(:redirect_url) do
+      client = strategy.client
+
+      params = { :redirect_uri => strategy.callback_url }.merge(strategy.authorize_params)
+      client.auth_code.authorize_url(params)
+    end
+
+    subject { strategy.request_phase }
+
+    context "when #options.use_admin is false" do
+      before { strategy.options.use_admin = false }
+
+      it "redirects to oauth provider" do
+        expect(strategy).to receive(:redirect).with(redirect_url)
+        subject
+      end
+    end
+
+    context "when #options.use_admin is true" do
+      before { strategy.options.use_admin = true }
+
+      it "redirects to oauth provider" do
+        admin_url = "/admin/login?redirectUrl=#{redirect_url}"
+
+        expect(strategy).to receive(:redirect).with(admin_url)
+        subject
+      end
+    end
+  end
 end
