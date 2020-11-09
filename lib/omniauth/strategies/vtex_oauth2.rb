@@ -31,9 +31,10 @@ module OmniAuth
       end
 
       def request_phase
+        account = options.account
         redirect_url = client.auth_code.authorize_url({ redirect_uri: callback_url }.merge(authorize_params))
 
-        return redirect("#{options.site}/admin/login?redirectUrl=#{redirect_url}") if options.use_admin
+        return redirect("https://#{account}.myvtex.com/admin/login?redirectUrl=#{redirect_url}") if options.use_admin
         redirect(redirect_url)
       end
 

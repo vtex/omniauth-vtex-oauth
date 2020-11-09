@@ -83,7 +83,7 @@ RSpec.describe(OmniAuth::Strategies::VtexOauth2) do
       before { strategy.options.use_admin = true }
 
       it "redirects to oauth provider" do
-        admin_url = "/admin/login?redirectUrl=#{redirect_url}"
+        admin_url = "https://some_account.myvtex.com/admin/login?redirectUrl=#{redirect_url}"
 
         expect(strategy).to(receive(:redirect).with(admin_url))
         subject
