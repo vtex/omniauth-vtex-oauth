@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "erb"
+
 def make_env(path = "/auth/test", props = {})
   {
     "REQUEST_METHOD" => "GET",
@@ -83,9 +85,12 @@ RSpec.describe(OmniAuth::Strategies::VtexOauth2) do
       before { strategy.options.use_admin = true }
 
       it "redirects to oauth provider" do
-        admin_url = "https://some_account.myvtex.com/admin/login?redirectUrl=#{redirect_url}"
+        encoded_redirect_url = ERB::Util.url_encode(redirect_url)
+        admin_url = "https://some_account.myvtex.com/_v/segment/admin-login/v1/login?returnUrl=#{encoded_redirect_url}"
 
         expect(strategy).to(receive(:redirect).with(admin_url))
+
+        puts admin_url
         subject
       end
     end

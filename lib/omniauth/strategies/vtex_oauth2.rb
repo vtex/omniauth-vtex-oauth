@@ -3,6 +3,7 @@
 require "omniauth-oauth2"
 require "json"
 require "base64"
+require "erb"
 
 module OmniAuth
   module Strategies
@@ -34,7 +35,15 @@ module OmniAuth
         account = options.account
         redirect_url = client.auth_code.authorize_url({ redirect_uri: callback_url }.merge(authorize_params))
 
-        return redirect("https://#{account}.myvtex.com/admin/login?redirectUrl=#{redirect_url}") if options.use_admin
+        if options.use_admin
+          encoded_redirect_url = ERB::Util.url_encode(redirect_url)
+          authorize_url = "https://#{account}.myvtex.com" \
+                          "/_v/segment/admin-login/v1/login" \
+                          "?returnUrl=#{encoded_redirect_url}"
+
+          return redirect(authorize_url)
+        end
+
         redirect(redirect_url)
       end
 
